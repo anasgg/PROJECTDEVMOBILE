@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='exercise.css') }}">
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="{{ url_for('static', filename='webrtc_adaptor.js') }}"></script>
+  <meta name=”robots” content=”noindex, nofollow”>
+
+  <style>
+    video {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* Space out content a bit */
+    body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      background-color: #e5e5e5;
+
+    }
+
+
+
+    /* Custom page header */
+    .header {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    /* Make the masthead heading the same height as the navigation */
+    .header h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 40px;
+    }
+
+    /* Custom page footer */
+    .footer {
+      padding-top: 19px;
+      color: #777;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    /* Customize container */
+    @media (min-width : 768px) {
+      .container {
+        max-width: 730px;
+      }
+    }
+
+    .container-narrow>hr {
+      margin: 30px 0;
+    }
+
+    /* Main marketing message and sign up button */
+    .jumbotron {
+      text-align: center;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    /* Responsive: Portrait tablets and up */
+    @media screen and (min-width: 768px) {
+
+      /* Remove the padding we set earlier */
+      .header,
+      .marketing,
+      .footer {
+        padding-right: 0;
+        padding-left: 0;
+      }
+
+      /* Space out the masthead */
+      .header {
+        margin-bottom: 30px;
+      }
+
+      /* Remove the bottom border on the jumbotron for visual effect */
+      .jumbotron {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <video id="smallVideo" src="{{ url_for('static', filename='male-Dumbbells-dumbbell-lateral-raise-front.mp4') }}"
+      style="display: block; top: 0%; right: 0%; width: 100px; height: 70px;" loop></video>
+  </div>
+  <div class="container">
+    <div class="jumbotron">
+      <form id="app-cover" action="/select_exercise" method="POST">
+        <div id="select-box">
+          <input type="checkbox" id="options-view-button">
+          <div id="select-button" class="brd">
+            <div id="selected-value">
+              <span>Select an exercise</span>
+            </div>
+            <div id="chevrons">
+              <i class="fas fa-chevron-up"></i>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div id="options">
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="squat">
+              <input class="s-c bottom" type="radio" name="exercise" value="squat">
+              <i class="fab fa-squat"></i>
+              <span class="label">squat</span>
+              <span class="opt-val">squat</span>
+            </div>
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="bicep curls">
+              <input class="s-c bottom" type="radio" name="exercise" value="bicep curls">
+              <i class="fab fa-bicep curls"></i>
+              <span class="label">bicep curls</span>
+              <span class="opt-val">bicep curls</span>
+            </div>
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="Shoulder Press">
+              <input class="s-c bottom" type="radio" name="exercise" value="Shoulder Press">
+              <i class="fab fa-Shoulder Press"></i>
+              <span class="label">Shoulder Press</span>
+              <span class="opt-val">Shoulder Press</span>
+            </div>
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="Dumbell lateral raises">
+              <input class="s-c bottom" type="radio" name="exercise" value="Dumbell lateral raises">
+              <i class="fab fa-Dumbell lateral raises"></i>
+              <span class="label">Dumbell lateral raises</span>
+              <span class="opt-val">Dumbell lateral raises</span>
+            </div>
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="Abs crunches">
+              <input class="s-c bottom" type="radio" name="exercise" value="Abs crunches">
+              <i class="fab fa-stack-overflow"></i>
+              <span class="label">Abs crunches</span>
+              <span class="opt-val">Abs crunches</span>
+            </div>
+            <div class="option">
+              <input class="s-c top" type="radio" name="exercise" value="Push Ups">
+              <input class="s-c bottom" type="radio" name="exercise" value="Push Ups">
+              <i class="fab fa-free-code-camp"></i>
+              <span class="label">Push Ups</span>
+              <span class="opt-val">Push Ups</span>
+            </div>
+            <div id="option-bg"></div>
+          </div>
+        </div>
+      </form>
+      <p>
+        <video id="mainVideo" autoplay controls playsinline>
+          <source src="{{ url_for('video_feed') }}" type="video/mp4">
+        </video>
+
+      </p>
+      <p>
+        <button id="startButton" class="startButton">Start</button>
+        <button id="stopButton" class="stopButton">Stop</button>
+      </p>
+    </div>
+  </div>
+
+</body>
+
+</html>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const mainVideo = document.getElementById('mainVideo');
+    const smallVideo = document.getElementById('smallVideo');
+
+    startButton.addEventListener('click', function () {
+      mainVideo.style.display = 'block';
+      mainVideo.play();
+      smallVideo.style.display = 'block';
+      smallVideo.play();
+    });
+
+    stopButton.addEventListener('click', function () {
+      mainVideo.pause();
+      smallVideo.pause()
+      mainVideo.currentTime = 0; // This resets the video to the start
+      smallVideo.currentTime = 0;
+      mainVideo.style.display = 'none';
+    });
+  });
+
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      mainVideo.srcObject = stream;
+      mainVideo.onloadedmetadata = () => {
+        mainVideo.play();
+      };
+    })
+    .catch(err => console.log("Error: " + err));
+</script>
